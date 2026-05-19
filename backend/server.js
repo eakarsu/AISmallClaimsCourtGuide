@@ -37,6 +37,12 @@ app.use('/api/documents', require('./routes/documents'));
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 
+// Custom Views (must be mounted BEFORE the 404 / error handler)
+app.use('/api/custom-views', require('./routes/customViews'));
+
+// 404 fallback for unmatched /api routes
+app.use('/api', (req, res) => res.status(404).json({ error: 'Not found' }));
+
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Internal server error' });

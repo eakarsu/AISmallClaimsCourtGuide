@@ -27,6 +27,7 @@ export default function Layout({ children }) {
         <div style={styles.navLinks}>
           <Link to="/" style={styles.navLink}>My Cases</Link>
           <Link to="/cases/new" style={styles.navLink}>New Case</Link>
+          <Link to="/custom-views" style={styles.navLink}>Court Views</Link>
           <span style={{ color: '#a0aec0', fontSize: 13 }}>{user.name}</span>
           <button onClick={logout} style={styles.btn}>Logout</button>
         </div>

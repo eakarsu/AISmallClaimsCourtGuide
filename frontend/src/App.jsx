@@ -16,6 +16,7 @@ import SettlementCalculator from './pages/SettlementCalculator.jsx';
 import CourtProcedureChecklist from './pages/CourtProcedureChecklist.jsx';
 import WitnessStatementGuide from './pages/WitnessStatementGuide.jsx';
 import AppealAssessment from './pages/AppealAssessment.jsx';
+import CustomViewsPage from './pages/CustomViewsPage.jsx';
 
 // === Batch 07 Gaps & Frontend Mounts ===
 import CfCaseEvaluationSettlementGuidance from './pages/CfCaseEvaluationSettlementGuidance';
@@ -70,6 +71,7 @@ export default function App() {
         <Route path="/cases/:id/appeal-assessment" element={<PrivateRoute><AppealAssessment /></PrivateRoute>} />
         <Route path="/witness-statement-guide" element={<PrivateRoute><WitnessStatementGuide /></PrivateRoute>} />
         <Route path="/appeal-assessment" element={<PrivateRoute><AppealAssessment /></PrivateRoute>} />
+        <Route path="/custom-views" element={<PrivateRoute><CustomViewsPage /></PrivateRoute>} />
         <Route path="*" element={<Navigate to="/" />} />
           // === Batch 07 Gaps & Frontend Mounts ===
           <Route path='/cf-case-evaluation-settlement-guidance' element={<CfCaseEvaluationSettlementGuidance />} />
