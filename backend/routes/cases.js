@@ -134,7 +134,7 @@ Respond with a single JSON object: {"classification": "photo|contract|receipt|in
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'anthropic/claude-3-5-sonnet-20241022',
+          model: process.env.OPENROUTER_MODEL || 'anthropic/claude-haiku-4.5',
           messages: [{ role: 'user', content: prompt }],
           max_tokens: 200,
         }),

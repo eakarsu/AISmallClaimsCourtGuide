@@ -39,6 +39,26 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Dat
 
 // Custom Views (must be mounted BEFORE the 404 / error handler)
 app.use('/api/custom-views', require('./routes/customViews'));
+app.use('/api/judgment-collection-tracker', require('./routes/judgmentCollectionTracker'));
+
+// AI feature: case-evaluation
+app.use('/api/ai/case-evaluation', require('./routes/ai-case-evaluation'));
+
+// === Gap Feature Routes (must be before 404 handler) ===
+app.use('/api/gap-no-evidenceorganizer', require('./routes/gap-no-evidenceorganizer'));
+app.use('/api/gap-no-witnessstatementguide', require('./routes/gap-no-witnessstatementguide'));
+app.use('/api/gap-no-settlementcalculator-casevalue-estimator', require('./routes/gap-no-settlementcalculator-casevalue-estimator'));
+app.use('/api/gap-no-courtprocedurechecklist-perjurisdiction', require('./routes/gap-no-courtprocedurechecklist-perjurisdiction'));
+app.use('/api/gap-no-appealassessment', require('./routes/gap-no-appealassessment'));
+app.use('/api/gap-no-case-tracking-beyond-crud-no-hearing-remi', require('./routes/gap-no-case-tracking-beyond-crud-no-hearing-remi'));
+app.use('/api/gap-no-fee-schedule-lookup-filing-fees-by-court', require('./routes/gap-no-fee-schedule-lookup-filing-fees-by-court'));
+app.use('/api/gap-no-statute-of-limitations-checker', require('./routes/gap-no-statute-of-limitations-checker'));
+app.use('/api/gap-no-legal-citation-library', require('./routes/gap-no-legal-citation-library'));
+app.use('/api/gap-no-efiling-integration-tyler-efiletexas', require('./routes/gap-no-efiling-integration-tyler-efiletexas'));
+app.use('/api/gap-no-notificationscalendar-reminders', require('./routes/gap-no-notificationscalendar-reminders'));
+app.use('/api/gap-no-payment-processing-for-court-fees', require('./routes/gap-no-payment-processing-for-court-fees'));
+app.use('/api/gap-no-audit-log-rbac', require('./routes/gap-no-audit-log-rbac'));
+// === End Gap Feature Routes ===
 
 // 404 fallback for unmatched /api routes
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found' }));
@@ -56,21 +76,3 @@ async function start() {
 }
 
 start().catch(console.error);
-
-// AI feature mount: case-evaluation
-app.use('/api/ai/case-evaluation', require('./routes/ai-case-evaluation'));
-// === Batch 07 Gaps & Frontend Mounts ===
-app.use('/api/gap-no-evidenceorganizer', require('./routes/gap-no-evidenceorganizer'));
-app.use('/api/gap-no-witnessstatementguide', require('./routes/gap-no-witnessstatementguide'));
-app.use('/api/gap-no-settlementcalculator-casevalue-estimator', require('./routes/gap-no-settlementcalculator-casevalue-estimator'));
-app.use('/api/gap-no-courtprocedurechecklist-perjurisdiction', require('./routes/gap-no-courtprocedurechecklist-perjurisdiction'));
-app.use('/api/gap-no-appealassessment', require('./routes/gap-no-appealassessment'));
-app.use('/api/gap-no-case-tracking-beyond-crud-no-hearing-remi', require('./routes/gap-no-case-tracking-beyond-crud-no-hearing-remi'));
-app.use('/api/gap-no-fee-schedule-lookup-filing-fees-by-court', require('./routes/gap-no-fee-schedule-lookup-filing-fees-by-court'));
-app.use('/api/gap-no-statute-of-limitations-checker', require('./routes/gap-no-statute-of-limitations-checker'));
-app.use('/api/gap-no-legal-citation-library', require('./routes/gap-no-legal-citation-library'));
-app.use('/api/gap-no-efiling-integration-tyler-efiletexas', require('./routes/gap-no-efiling-integration-tyler-efiletexas'));
-app.use('/api/gap-no-notificationscalendar-reminders', require('./routes/gap-no-notificationscalendar-reminders'));
-app.use('/api/gap-no-payment-processing-for-court-fees', require('./routes/gap-no-payment-processing-for-court-fees'));
-app.use('/api/gap-no-audit-log-rbac', require('./routes/gap-no-audit-log-rbac'));
-// === End Batch 07 ===

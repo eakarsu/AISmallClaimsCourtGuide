@@ -24,7 +24,7 @@ async function callOpenRouter(messages, maxTokens = 1500) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'anthropic/claude-3-5-sonnet-20241022',
+      model: process.env.OPENROUTER_MODEL || 'anthropic/claude-haiku-4.5',
       messages,
       max_tokens: maxTokens,
     }),
