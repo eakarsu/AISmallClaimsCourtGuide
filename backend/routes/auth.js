@@ -3,12 +3,13 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const { pool } = require('../db');
+const { jwtSecret } = require('../config/security');
 
 const router = express.Router();
 
 router.post('/register', [
   body('email').isEmail(),
-  body('password').isLength({ min: 6 }),
+  body('password').isLength({ min: 12 }),
   body('name').notEmpty(),
 ], async (req, res) => {
   const errors = validationResult(req);
@@ -25,7 +26,7 @@ router.post('/register', [
       [email, password_hash, name, state]
     );
     const user = result.rows[0];
-    const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign({ id: user.id, email: user.email, role: user.role || 'claimant' }, jwtSecret, { expiresIn: '7d' });
     res.status(201).json({ token, user });
   } catch (err) {
     console.error(err);
@@ -49,7 +50,7 @@ router.post('/login', [
     const valid = await bcrypt.compare(password, user.password_hash);
     if (!valid) return res.status(401).json({ error: 'Invalid credentials' });
 
-    const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign({ id: user.id, email: user.email, role: user.role || 'claimant' }, jwtSecret, { expiresIn: '7d' });
     const { password_hash, ...safeUser } = user;
     res.json({ token, user: safeUser });
   } catch (err) {

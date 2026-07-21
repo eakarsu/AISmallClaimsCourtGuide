@@ -4,7 +4,8 @@ const helmet = require('helmet');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
-const { initDatabase } = require('./db');
+const { verifyDatabase } = require('./db');
+const auth = require('./middleware/auth');
 
 const app = express();
 
@@ -31,11 +32,15 @@ app.use(globalLimiter);
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
+app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
+app.use('/api/claim-workflow', auth, require('./routes/claimWorkflow'));
+app.use(/^\/api\/(?:gap-|ai(?:\/|$)|ai-)/, auth, (req, res) => res.status(503).json({
+  error: 'Generated AI and gap routes are quarantined; use /api/claim-workflow', retryable: false,
+}));
+app.use('/api', auth);
 app.use('/api/cases', require('./routes/cases'));
 app.use('/api/ai', require('./routes/ai'));
 app.use('/api/documents', require('./routes/documents'));
-
-app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 
 // Custom Views (must be mounted BEFORE the 404 / error handler)
 app.use('/api/custom-views', require('./routes/customViews'));
@@ -71,8 +76,8 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 3001;
 
 async function start() {
-  await initDatabase();
+  await verifyDatabase();
   app.listen(PORT, () => console.log(`AI Small Claims server running on port ${PORT}`));
 }
 
-start().catch(console.error);
+start().catch(error => { console.error('Failed to start server:', error.message); process.exitCode = 1; });
