@@ -17,7 +17,8 @@ function ensureKey(res) {
 }
 
 async function callOpenRouter(messages, maxTokens = 1500) {
-  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+  const baseUrl = (process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1').replace(/\/$/, '');
+  const res = await fetch(`${baseUrl}/chat/completions`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
@@ -33,7 +34,10 @@ async function callOpenRouter(messages, maxTokens = 1500) {
     const err = await res.text();
     throw new Error(`OpenRouter error: ${err}`);
   }
-  return res.json();
+  const data = await res.json();
+  const content = data.choices?.[0]?.message?.content;
+  if (!content || !String(content).trim()) throw new Error('OpenRouter returned an empty response');
+  return data;
 }
 
 async function persistResult(userId, endpoint, inputData, result) {
