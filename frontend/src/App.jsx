@@ -1,3 +1,5 @@
+import { useLocation } from 'react-router-dom';
+import AppSidebar from './components/AppSidebar';
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login.jsx';
@@ -52,10 +54,19 @@ function PrivateRoute({ children }) {
   return token ? children : <Navigate to="/login" />;
 }
 
+function SidebarFrame({ children }) {
+  const location = useLocation();
+  const show = Boolean(localStorage.getItem('token')) && !['/login', '/register'].includes(location.pathname);
+  return <div className={show ? 'codex-nav-shell' : undefined}>
+    {show && <AppSidebar />}
+    {children}
+  </div>;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
+      <SidebarFrame><Routes>
         <Route path="/insights/timeline" element={<TimelineView />} />
         <Route path="/codex/custom-viz" element={<CodexCustomVizFeature />} />
         <Route path="/codex/operations" element={<CodexOperationsFeature />} />
@@ -108,7 +119,7 @@ export default function App() {
         <Route path="/gap-no-audit-log-rbac" element={<GapNoAuditLogRbac />} />
 
         <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
+      </Routes></SidebarFrame>
     </BrowserRouter>
   );
 }
