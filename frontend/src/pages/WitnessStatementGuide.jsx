@@ -1,3 +1,4 @@
+import FormattedAIReport from "../components/FormattedAIReport";
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../components/Layout.jsx';
@@ -25,6 +26,11 @@ export default function WitnessStatementGuide() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
+
+  const presets = [
+    { label: 'Deposit witness', fill: () => { setDisputeType('Security deposit'); setFacts('The landlord withheld $1,850 after a June move-out, citing damage that the tenant disputes.'); setWitnessRole('Neighbor present at move-out'); setWitnessKnownFacts('The neighbor personally saw the empty apartment on June 30 and watched the tenant take dated photographs.'); } },
+    { label: 'Repair witness', fill: () => { setDisputeType('Incomplete roof repair'); setFacts('A contractor accepted $3,200 but left the roof repair unfinished.'); setWitnessRole('Second roofing contractor'); setWitnessKnownFacts('The contractor inspected the roof on May 12 and observed exposed flashing and water staining.'); } },
+  ];
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -55,6 +61,9 @@ export default function WitnessStatementGuide() {
       </div>
 
       <form onSubmit={handleSubmit} style={s.card}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 16 }} aria-label="Sample scenarios">
+          {presets.map(({ label, fill }) => <button key={label} type="button" style={{ ...s.btn, background: '#edf2f7', color: '#1a365d' }} onClick={fill}>{label}</button>)}
+        </div>
         <div style={{ marginBottom: 12 }}>
           <label style={s.label}>Dispute type</label>
           <input style={s.input} value={disputeType} onChange={e => setDisputeType(e.target.value)} placeholder="e.g. unpaid wages, security deposit" />
@@ -83,7 +92,7 @@ export default function WitnessStatementGuide() {
         <div style={s.card}>
           <h2>Witness Statement Guide</h2>
           {result.disclaimer && <div style={s.disclaimer}>{result.disclaimer}</div>}
-          <pre style={{ background: '#f7fafc', padding: 12, borderRadius: 6, whiteSpace: 'pre-wrap', overflow: 'auto' }}>{JSON.stringify(result, null, 2)}</pre>
+          <FormattedAIReport response={result} />
         </div>
       )}
     </Layout>

@@ -1,3 +1,4 @@
+import FormattedAIReport from '../components/FormattedAIReport.jsx';
 // // === Batch 07 Gaps & Frontend Mounts ===
 import React, { useState } from 'react';
 
@@ -8,18 +9,9 @@ export default function GapNoCourtprocedurechecklistPerjurisdiction() {
   const [error, setError] = useState(null);
 
   const sampleRequests = [
-      {
-          "label": "Scenario",
-          "value": "Run No /court-procedure-checklist (per-jurisdiction) for a realistic customer case.\nContext: a team needs a practical recommendation based on incomplete operating data.\nGoal: identify the best action, key risks, missing information, and expected business impact.\nReturn: summary, prioritized action plan, assumptions, and follow-up questions."
-      },
-      {
-          "label": "Data sample",
-          "value": "Analyze this No /court-procedure-checklist (per-jurisdiction) data sample.\nInput records:\n- Record 1: urgent, customer impact high, owner unassigned\n- Record 2: medium priority, blocked by missing data\n- Record 3: recurring issue, automation opportunity\nReturn structured findings, anomalies, recommendations, and confidence."
-      },
-      {
-          "label": "Executive review",
-          "value": "Prepare an executive review for No /court-procedure-checklist (per-jurisdiction).\nAudience: business owner, operations lead, and implementation team.\nInclude impact, risk, estimated effort, decision points, and a concise next-step plan."
-      }
+    {"label": "Deposit dispute", "value": "For No /court-procedure-checklist (per-jurisdiction), consider a tenant seeking return of an $1,850 security deposit in Alameda County, California. The tenant has a lease, deposit receipt, dated move-out photos, and the landlord’s itemized deductions. Identify useful next steps, missing facts, and facts that need local court verification."},
+    {"label": "Repair dispute", "value": "For No /court-procedure-checklist (per-jurisdiction), consider a customer who paid $3,200 for a roof repair in Travis County, Texas. Work was left unfinished. The customer has a signed estimate, payment receipt, photos, and messages from the contractor. Explain the relevant analysis, evidence gaps, and practical options without assuming a court outcome."},
+    {"label": "Filing preparation", "value": "For No /court-procedure-checklist (per-jurisdiction), consider a $950 unpaid personal loan claim in Queens County, New York. There is a signed repayment note, bank transfer record, and reminder messages. Summarize the evidence, questions to verify locally, and a concise preparation checklist."}
   ];
 
   const applySampleRequest = (value) => {
@@ -83,9 +75,7 @@ export default function GapNoCourtprocedurechecklistPerjurisdiction() {
         <div style={{ marginTop: 16, padding: 12, background: '#fee', color: '#900', borderRadius: 6 }}>{error}</div>
       )}
       {output && (
-        <pre style={{ marginTop: 16, padding: 12, background: '#f7f7f7', borderRadius: 6, overflow: 'auto', maxHeight: 480 }}>
-{JSON.stringify(output, null, 2)}
-        </pre>
+        <FormattedAIReport response={output} />
       )}
     </div>
   );

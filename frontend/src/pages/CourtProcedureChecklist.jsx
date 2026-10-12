@@ -1,3 +1,4 @@
+import FormattedAIReport from "../components/FormattedAIReport";
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../components/Layout.jsx';
@@ -24,6 +25,11 @@ export default function CourtProcedureChecklist() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
+
+  const presets = [
+    { label: 'California deposit claim', fill: () => { setState('California'); setCounty('Alameda'); setClaimType('security_deposit'); setStage('pre_filing'); } },
+    { label: 'Texas repair claim', fill: () => { setState('Texas'); setCounty('Travis'); setClaimType('services_not_rendered'); setStage('service'); } },
+  ];
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -54,6 +60,9 @@ export default function CourtProcedureChecklist() {
       </div>
 
       <form onSubmit={handleSubmit} style={s.card}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 16 }} aria-label="Sample scenarios">
+          {presets.map(({ label, fill }) => <button key={label} type="button" style={{ ...s.btn, background: '#edf2f7', color: '#1a365d' }} onClick={fill}>{label}</button>)}
+        </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
           <div>
             <label style={s.label}>State *</label>
@@ -100,7 +109,7 @@ export default function CourtProcedureChecklist() {
         <div style={s.card}>
           <h2>Checklist</h2>
           {result.disclaimer && <div style={s.disclaimer}>{result.disclaimer}</div>}
-          <pre style={{ background: '#f7fafc', padding: 12, borderRadius: 6, whiteSpace: 'pre-wrap', overflow: 'auto' }}>{JSON.stringify(result, null, 2)}</pre>
+          <FormattedAIReport response={result} />
         </div>
       )}
     </Layout>

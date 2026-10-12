@@ -12,7 +12,8 @@ export default function ProceduralRulesEditor() {
   async function load() {
     try {
       const r = await api.get('/custom-views/rules');
-      setRules(r.data.rules || []);
+      if (!Array.isArray(r.data?.rules)) throw new Error('Rules list returned an invalid response.');
+      setRules(r.data.rules);
     } catch (e) {
       setMsg(`Load error: ${e.response?.data?.error || e.message}`);
     }

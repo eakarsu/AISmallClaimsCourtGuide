@@ -40,7 +40,11 @@ export default function EvidenceLocker() {
 
   useEffect(() => {
     api.get(`/cases/${id}/evidence`)
-      .then(r => setEvidence(r.data.data))
+      .then(r => {
+        if (!Array.isArray(r.data?.data)) throw new Error('Evidence list returned an invalid response.');
+        setEvidence(r.data.data);
+      })
+      .catch(err => setError(err.message || 'Could not load evidence.'))
       .finally(() => setLoading(false));
   }, [id]);
 

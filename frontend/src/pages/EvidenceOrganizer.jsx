@@ -1,3 +1,4 @@
+import FormattedAIReport from "../components/FormattedAIReport";
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../components/Layout.jsx';
@@ -23,6 +24,11 @@ export default function EvidenceOrganizer() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
+
+  const presets = [
+    { label: 'Deposit evidence', fill: () => { setClaimSummary('Tenant seeks $1,850 of a security deposit withheld after a June move-out despite a clean inspection.'); setExhibitsText('Lease and deposit receipt dated January 8\nMove-out photographs dated June 30\nLandlord itemization and tenant response'); } },
+    { label: 'Repair evidence', fill: () => { setClaimSummary('Customer paid $3,200 for a roof repair that was left unfinished and caused water damage.'); setExhibitsText('Signed repair estimate\nPayment receipt dated May 4\nPhotographs of unfinished roof and water damage\nContractor text acknowledging unfinished work'); } },
+  ];
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -51,6 +57,9 @@ export default function EvidenceOrganizer() {
       </div>
 
       <form onSubmit={handleSubmit} style={s.card}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 16 }} aria-label="Sample scenarios">
+          {presets.map(({ label, fill }) => <button key={label} type="button" style={{ ...s.btn, background: '#edf2f7', color: '#1a365d' }} onClick={fill}>{label}</button>)}
+        </div>
         <div style={{ marginBottom: 12 }}>
           <label style={s.label}>Claim summary</label>
           <textarea style={s.textarea} rows={4} value={claimSummary} onChange={e => setClaimSummary(e.target.value)} placeholder="Briefly: who did what, when, harm, amount..." />
@@ -71,7 +80,7 @@ export default function EvidenceOrganizer() {
         <div style={s.card}>
           <h2>Organization</h2>
           {result.disclaimer && <div style={s.disclaimer}>{result.disclaimer}</div>}
-          <pre style={{ background: '#f7fafc', padding: 12, borderRadius: 6, whiteSpace: 'pre-wrap', overflow: 'auto' }}>{JSON.stringify(result, null, 2)}</pre>
+          <FormattedAIReport response={result} />
         </div>
       )}
     </Layout>

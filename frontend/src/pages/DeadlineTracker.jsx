@@ -37,10 +37,15 @@ export default function DeadlineTracker() {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ deadline_type: '', due_date: '', description: '' });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     api.get(`/cases/${id}/deadlines`)
-      .then(r => setDeadlines(r.data.data))
+      .then(r => {
+        if (!Array.isArray(r.data?.data)) throw new Error('Deadline list returned an invalid response.');
+        setDeadlines(r.data.data);
+      })
+      .catch(err => setError(err.message || 'Could not load deadlines.'))
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -98,7 +103,8 @@ export default function DeadlineTracker() {
         </form>
       )}
 
-      {loading ? <p>Loading...</p> : deadlines.length === 0 ? (
+      {error && <p role="alert">{error}</p>}
+      {loading ? <p>Loading...</p> : error ? null : deadlines.length === 0 ? (
         <div style={s.empty}>
           <p style={{ fontSize: 36, marginBottom: 12 }}>📅</p>
           <p>No deadlines tracked yet. Add important dates to stay on schedule.</p>

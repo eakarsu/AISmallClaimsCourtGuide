@@ -1,3 +1,4 @@
+import FormattedAIReport from "../components/FormattedAIReport";
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../components/Layout.jsx';
@@ -27,6 +28,11 @@ export default function AppealAssessment() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
+
+  const presets = [
+    { label: 'Security deposit appeal', fill: () => { setState('California'); setDisputeType('Security deposit'); setJudgmentAmount('1850'); setRulingSummary('The court entered judgment for the landlord after declining to consider the dated move-out photographs and itemized deposit statement.'); setAllegedErrors('The photographs were offered at the hearing but excluded without an explanation.'); setDeadlineKnown('Confirm the appeal deadline on the written judgment and with the court clerk.'); } },
+    { label: 'Repair dispute appeal', fill: () => { setState('New York'); setDisputeType('Vehicle repair'); setJudgmentAmount('3200'); setRulingSummary('The court dismissed the claim despite a signed estimate and receipts showing payment for work that was not completed.'); setAllegedErrors('The ruling did not address the signed estimate or the mechanic’s written admission.'); setDeadlineKnown('Unknown; obtain the judgment date and confirm the local deadline.'); } },
+  ];
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -59,6 +65,9 @@ export default function AppealAssessment() {
       </div>
 
       <form onSubmit={handleSubmit} style={s.card}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 16 }} aria-label="Sample scenarios">
+          {presets.map(({ label, fill }) => <button key={label} type="button" style={{ ...s.btn, background: '#edf2f7', color: '#1a365d' }} onClick={fill}>{label}</button>)}
+        </div>
         <div style={{ marginBottom: 12 }}>
           <label style={s.label}>State *</label>
           <input style={s.input} value={state} onChange={e => setState(e.target.value)} placeholder="e.g. CA, TX" required />
@@ -95,7 +104,7 @@ export default function AppealAssessment() {
         <div style={s.card}>
           <h2>Appeal Assessment</h2>
           {result.disclaimer && <div style={s.disclaimer}>{result.disclaimer}</div>}
-          <pre style={{ background: '#f7fafc', padding: 12, borderRadius: 6, whiteSpace: 'pre-wrap', overflow: 'auto' }}>{JSON.stringify(result, null, 2)}</pre>
+          <FormattedAIReport response={result} />
         </div>
       )}
     </Layout>

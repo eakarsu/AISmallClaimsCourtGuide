@@ -47,6 +47,19 @@ async function persistResult(userId, endpoint, inputData, result) {
   );
 }
 
+// Read-only history for the authenticated user's saved AI results.
+router.get('/history', async (req, res) => {
+  try {
+    const rows = await pool.query(
+      'SELECT id, endpoint, result, created_at FROM ai_results WHERE user_id = $1 ORDER BY created_at DESC LIMIT 100',
+      [req.user.id]
+    );
+    res.json({ items: rows.rows });
+  } catch (err) {
+    res.status(500).json({ error: 'Could not load AI history' });
+  }
+});
+
 // POST /api/ai/jurisdiction-check
 router.post('/jurisdiction-check', aiRateLimiter, [
   body('state').notEmpty(),

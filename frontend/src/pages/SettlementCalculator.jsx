@@ -1,3 +1,5 @@
+import FormattedAIReport from "../components/FormattedAIReport";
+import FullFieldPresets from "../components/FullFieldPresets";
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../components/Layout.jsx';
@@ -25,6 +27,12 @@ export default function SettlementCalculator() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
+
+  const presets = [
+    { label: 'Deposit dispute', values: { claimAmount: '1850', strengthsText: 'Signed lease and deposit receipt\nDated move-out photographs', weaknessesText: 'Landlord alleges cleaning costs\nNo independent witness at move-out', opponentPosition: 'Landlord offers $600 and disputes the condition of the unit.' } },
+    { label: 'Repair dispute', values: { claimAmount: '3200', strengthsText: 'Signed estimate\nProof of payment\nContractor acknowledged unfinished work in writing', weaknessesText: 'Scope of additional water damage is disputed\nSecond contractor estimate is pending', opponentPosition: 'Contractor offers to return $900 but denies liability for water damage.' } },
+    { label: 'Unpaid invoice', values: { claimAmount: '2400', strengthsText: 'Signed service agreement\nDelivered work order and invoice\nEmail confirming delivery', weaknessesText: 'Customer disputes two line items\nNo signed acceptance of completion', opponentPosition: 'Customer offers $1,200 and claims partial non-delivery.' } },
+  ];
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -57,6 +65,12 @@ export default function SettlementCalculator() {
       </div>
 
       <form onSubmit={handleSubmit} style={s.card}>
+        <FullFieldPresets
+          value={{ claimAmount: String(claimAmount ?? ''), strengthsText, weaknessesText, opponentPosition }}
+          presets={presets}
+          disabled={loading}
+          onChange={(next) => { setClaimAmount(next.claimAmount); setStrengthsText(next.strengthsText); setWeaknessesText(next.weaknessesText); setOpponentPosition(next.opponentPosition); setError(''); }}
+        />
         <div style={{ marginBottom: 12 }}>
           <label style={s.label}>Claim amount ($) *</label>
           <input type="number" min="0" step="0.01" style={s.input} value={claimAmount} onChange={e => setClaimAmount(e.target.value)} required />
@@ -85,7 +99,7 @@ export default function SettlementCalculator() {
         <div style={s.card}>
           <h2>Settlement Analysis</h2>
           {result.disclaimer && <div style={s.disclaimer}>{result.disclaimer}</div>}
-          <pre style={{ background: '#f7fafc', padding: 12, borderRadius: 6, whiteSpace: 'pre-wrap', overflow: 'auto' }}>{JSON.stringify(result, null, 2)}</pre>
+          <FormattedAIReport response={result} />
         </div>
       )}
     </Layout>

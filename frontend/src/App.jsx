@@ -3,6 +3,7 @@ import AppSidebar from './components/AppSidebar';
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login.jsx';
+import AIHistory from './pages/AIHistory.jsx';
 import Register from './pages/Register.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import NewCase from './pages/NewCase.jsx';
@@ -74,6 +75,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+        <Route path="/ai-history" element={<PrivateRoute><AIHistory /></PrivateRoute>} />
         <Route path="/cases/new" element={<PrivateRoute><NewCase /></PrivateRoute>} />
         <Route path="/cases/:id" element={<PrivateRoute><CaseDetail /></PrivateRoute>} />
         <Route path="/cases/:id/jurisdiction" element={<PrivateRoute><JurisdictionChecker /></PrivateRoute>} />

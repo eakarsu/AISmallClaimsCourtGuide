@@ -8,6 +8,7 @@ const STATIC_LINKS = [
   { to: '/codex/operations', label: 'Operations', group: 'Insights' },
   { to: '/', label: 'Dashboard', group: 'Workspace' },
   { to: '/cases/new', label: 'New Case', group: 'Workspace' },
+  { to: '/ai-history', label: 'AI History', group: 'Workspace' },
   { to: '/evidence-organizer', label: 'Evidence Organizer', group: 'Workspace' },
   { to: '/settlement-calculator', label: 'Settlement Calculator', group: 'Workspace' },
   { to: '/court-procedure-checklist', label: 'Court Procedure Checklist', group: 'Workspace' },
