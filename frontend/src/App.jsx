@@ -21,6 +21,7 @@ import WitnessStatementGuide from './pages/WitnessStatementGuide.jsx';
 import AppealAssessment from './pages/AppealAssessment.jsx';
 import CustomViewsPage from './pages/CustomViewsPage.jsx';
 import JudgmentCollectionTracker from './pages/JudgmentCollectionTracker.jsx';
+import FeaturePackPage from './pages/FeaturePackPage.jsx';
 
 // CF features
 import CfCaseEvaluationSettlementGuidance from './pages/CfCaseEvaluationSettlementGuidance';
@@ -95,6 +96,7 @@ export default function App() {
         <Route path="/witness-statement-guide" element={<PrivateRoute><WitnessStatementGuide /></PrivateRoute>} />
         <Route path="/appeal-assessment" element={<PrivateRoute><AppealAssessment /></PrivateRoute>} />
         <Route path="/custom-views" element={<PrivateRoute><CustomViewsPage /></PrivateRoute>} />
+        <Route path="/feature-pack" element={<PrivateRoute><FeaturePackPage /></PrivateRoute>} />
         <Route path="/judgment-collection-tracker" element={<PrivateRoute><JudgmentCollectionTracker /></PrivateRoute>} />
 
         {/* CF features */}

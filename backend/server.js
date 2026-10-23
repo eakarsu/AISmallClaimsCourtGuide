@@ -34,6 +34,7 @@ app.use(globalLimiter);
 app.use('/api/auth', require('./routes/auth'));
 app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 app.use('/api/claim-workflow', auth, require('./routes/claimWorkflow'));
+app.use('/api/feature-pack', auth, require('./routes/featurePack'));
 app.use(/^\/api\/(?:gap-|ai-)/, auth, (req, res) => res.status(503).json({
   error: 'Generated AI and gap routes are quarantined; use /api/claim-workflow', retryable: false,
 }));
